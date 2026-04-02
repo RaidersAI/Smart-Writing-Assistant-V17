@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Ultra Assistant V17 DUAL</title>
+    <title>Ultra Assistant V17 FINAL</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root { --primary: #10b981; --accent: #8b5cf6; --bg: #000000; --text: #f8fafc; --green-outline: #10b981; }
@@ -18,10 +18,7 @@
         .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
         .btn-sub { background: #111111; color: white; padding: 12px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; border: 2px solid var(--green-outline) !important; }
         #settings { display: none; padding: 20px; background: #0a0a0a; border-radius: 18px; margin-bottom: 20px; border: 2px solid var(--accent); }
-        
-        /* HERSTELDE RED ZONE */
         .red-zone-translator { display: none; background: rgba(139, 92, 246, 0.15); padding: 15px; border-radius: 18px; margin-bottom: 15px; border: 2px solid var(--accent); align-items: center; gap: 10px; }
-        
         #response { padding: 20px; border-radius: 18px; background: #000000; display: none; line-height: 1.6; white-space: pre-wrap; border: 2px solid var(--green-outline) !important; margin-top: 10px; }
         .loader { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid rgba(16, 185, 129, 0.1); border-left-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -32,7 +29,7 @@
 <div class="container">
     <div class="card">
         <h1>ULTRA ASSISTANT</h1>
-        <p class="tagline">Gemini 2.0 & 2.5 | Pitch Black Dual</p>
+        <p class="tagline">Gemini 2.0 & 2.5 | Auto-Save Engine</p>
         <div style="text-align: right; margin-bottom: 15px;"><button class="btn-sub" onclick="toggleSettings()"><i class="fas fa-sliders-h"></i> Expert Opties</button></div>
         <div id="settings">
             <label class="section-label">AI Model</label>
@@ -52,8 +49,8 @@
             <label class="section-label">Creativiteit</label>
             <input type="range" id="temp" min="0" max="10" value="7">
         </div>
-        <label class="section-label">API Sleutel</label>
-        <input type="password" id="apiKey" placeholder="Plak Gemini sleutel...">
+        <label class="section-label">API Sleutel (Auto-Save)</label>
+        <input type="password" id="apiKey" placeholder="Plak Gemini sleutel..." oninput="saveKeyManually()">
         <div class="grid">
             <select id="langTo"><option value="none">Niet vertalen</option><option value="Nederlands">Nederlands 🇳🇱</option><option value="Engels">Engels 🇬🇧</option></select>
             <select id="tone"><option value="normaal">Standaard</option><option value="zakelijk">Zakelijk</option><option value="formeel">Formeel</option></select>
@@ -66,7 +63,6 @@
             <button class="btn-sub" onclick="runAI('summarize')">Samenvatten 📝</button>
             <button class="btn-sub" onclick="runAI('rewrite')">Herschrijven 🔄</button>
         </div>
-
         <div id="redZoneBar" class="red-zone-translator">
             <select id="quickLang" style="margin-bottom:0; flex-grow: 1;">
                 <option value="Nederlands">Nederlands 🇳🇱</option>
@@ -75,15 +71,31 @@
             </select>
             <button class="btn-sub" style="margin-bottom:0; background:var(--accent); border:none !important;" onclick="translateOutput()">VERTAAL</button>
         </div>
-
         <div id="loader" class="loader"></div>
         <div id="response"></div>
     </div>
 </div>
 <script>
-    window.onload = () => { if(localStorage.getItem('v17_key')) document.getElementById('apiKey').value = localStorage.getItem('v17_key'); };
-    function toggleSettings() { const s = document.getElementById('settings'); s.style.display = s.style.display === 'block' ? 'none' : 'block'; }
-    
+    // DE FIX: Sleutel direct laden bij opstarten
+    window.onload = () => {
+        const savedKey = localStorage.getItem('v17_ultimate_key');
+        if (savedKey) {
+            document.getElementById('apiKey').value = savedKey;
+            console.log("Sleutel geladen");
+        }
+    };
+
+    // DE FIX: Sleutel opslaan zodra je typt
+    function saveKeyManually() {
+        const key = document.getElementById('apiKey').value.trim();
+        localStorage.setItem('v17_ultimate_key', key);
+    }
+
+    function toggleSettings() {
+        const s = document.getElementById('settings');
+        s.style.display = (s.style.display === 'none' || s.style.display === '') ? 'block' : 'none';
+    }
+
     async function runAI(mode) {
         const key = document.getElementById('apiKey').value.trim();
         const text = document.getElementById('userInput').value;
@@ -96,7 +108,10 @@
         const loader = document.getElementById('loader');
 
         if (!key || !text) return alert("Sleutel en tekst invullen!");
-        localStorage.setItem('v17_key', key);
+        
+        // Dubbele zekerheid voor opslaan
+        localStorage.setItem('v17_ultimate_key', key);
+
         resBox.style.display = 'none'; redZone.style.display = 'none'; loader.style.display = 'block';
 
         let prompt = `Persona: ${persona}. Toon: ${tone}. Taak: ${mode}. Tekst: ${text}`;
@@ -113,7 +128,7 @@
                 resBox.style.display = 'block';
                 redZone.style.display = 'flex';
             }
-        } catch (e) { loader.style.display = 'none'; alert("Fout bij model aanroep."); }
+        } catch (e) { loader.style.display = 'none'; alert("Check je sleutel of model beschikbaarheid."); }
     }
 
     async function translateOutput() {
