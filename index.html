@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Ultra Assistant V17</title>
+    <title>Ultra Assistant V17 DUAL</title>
     
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/manifest+json;base64,ewogICJuYW1lIjogIlVsdHJhIEFzc2lzdGFudCIsCiAgInNob3J0X25hbWUiOiAiQXNzaXN0YW50IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMDAwMDAiLAogICJ0aGVtZV9jb2xvciI6ICIjMDAwMDAwIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvNDcxLzQ3MTY2My5wbmciLAogICAgICAic2l6ZXMiOiAiNTEyeDUxMiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIKICAgIH0KICBdCn0=">
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -21,7 +18,7 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
@@ -29,7 +26,6 @@
             justify-content: center;
             padding: 15px;
             min-height: 100vh;
-            -webkit-tap-highlight-color: transparent;
         }
 
         .container { width: 100%; max-width: 650px; }
@@ -46,19 +42,18 @@
             background: linear-gradient(45deg, #10b981, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 5px;
             font-weight: 900;
-            letter-spacing: -1px;
         }
 
-        .tagline { text-align: center; color: #64748b; font-size: 0.85rem; margin-bottom: 25px; font-weight: 500; }
+        .tagline { text-align: center; color: #64748b; font-size: 0.9rem; margin-bottom: 25px; }
 
         .section-label {
             display: block;
             margin-bottom: 8px;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -71,30 +66,24 @@
             border-radius: 14px;
             background: #111111;
             color: white;
-            font-size: 16px; /* Voorkomt inzoomen op iPhone */
+            font-size: 16px;
             box-sizing: border-box;
             border: 2px solid var(--green-outline) !important;
             outline: none;
-            transition: 0.3s;
         }
-
-        input:focus, textarea:focus { border-color: var(--accent) !important; }
 
         .btn-main {
             background: linear-gradient(45deg, var(--primary), var(--accent));
             color: white;
             padding: 18px;
-            border-radius: 16px;
+            border-radius: 14px;
             border: none;
             width: 100%;
             font-weight: 800;
             cursor: pointer;
             font-size: 1.1rem;
             margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
         }
-
-        .btn-main:active { transform: scale(0.98); }
 
         .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
         
@@ -105,12 +94,8 @@
             border-radius: 12px;
             cursor: pointer;
             font-size: 0.85rem;
-            font-weight: 600;
             border: 2px solid var(--green-outline) !important;
-            transition: 0.2s;
         }
-
-        .btn-sub:active { background: #1a1a1a; }
 
         #settings {
             display: none; 
@@ -121,47 +106,29 @@
             border: 2px solid var(--accent);
         }
 
-        .red-zone-translator {
-            display: none; 
-            background: rgba(139, 92, 246, 0.1);
-            padding: 15px;
-            border-radius: 18px;
-            margin-bottom: 15px;
-            border: 2px solid var(--accent);
-            align-items: center;
-            gap: 10px;
-        }
-
         #response {
             padding: 20px;
             border-radius: 18px;
-            background: #050505;
+            background: #000000;
             display: none;
-            line-height: 1.7;
+            line-height: 1.6;
             white-space: pre-wrap;
             border: 2px solid var(--green-outline) !important;
             margin-top: 10px;
-            color: #e2e8f0;
-            font-size: 0.95rem;
         }
 
         .loader {
             display: none;
             margin: 20px auto;
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             border: 4px solid rgba(16, 185, 129, 0.1);
             border-left-color: var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        
-        /* Custom range slider styling */
-        input[type=range] { -webkit-appearance: none; background: transparent; border: none !important; }
-        input[type=range]::-webkit-slider-runnable-track { background: #222; height: 8px; border-radius: 5px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; background: var(--accent); border-radius: 50%; margin-top: -6px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     </style>
 </head>
 <body>
@@ -169,29 +136,38 @@
 <div class="container">
     <div class="card">
         <h1>ULTRA ASSISTANT</h1>
-        <p class="tagline">Gemini 1.5 Flash | Pitch Black Edition</p>
+        <p class="tagline">Gemini 2.0 & 2.5 | Dual Flash Engine</p>
 
         <div style="text-align: right; margin-bottom: 15px;">
             <button class="btn-sub" onclick="toggleSettings()"><i class="fas fa-sliders-h"></i> Expert Opties</button>
         </div>
 
         <div id="settings">
+            <label class="section-label">Selecteer AI Model</label>
+            <select id="modelSelect">
+                <option value="gemini-2.0-flash-exp">Gemini 2.0 Flash (Snelheid) ⚡</option>
+                <option value="gemini-2.5-flash">Gemini 2.5 Flash (Superieur) 🧠</option>
+            </select>
+            
             <label class="section-label">AI Persona</label>
             <select id="persona">
-                <option value="Je bent een behulpzame Assistent.">Standaard Assistent 🤖</option>
-                <option value="Je bent een uiterst professionele directiesecretaresse.">Directiesecretaresse 🏢</option>
-                <option value="Je bent een juridisch adviseur. Antwoord feitelijk en formeel.">Juridisch Adviseur ⚖️</option>
-                <option value="Je bent een creatieve copywriter. Maak teksten pakkend.">Creatieve Copywriter ✍️</option>
-                <option value="Je bent een technische schrijver, wees accuraat en helder.">Technisch Schrijver 🛠️</option>
-                <option value="Je bent een professor die complexe dingen simpel uitlegt.">Professor 🎓</option>
-                <option value="Je bent een motiverende coach.">Motiverende Coach 🏆</option>
+                <option value="Behulpzame Assistent">Standaard Assistent 🤖</option>
+                <option value="Directiesecretaresse">Directiesecretaresse 🏢</option>
+                <option value="Juridisch Adviseur">Juridisch Adviseur ⚖️</option>
+                <option value="Creatieve Copywriter">Creatieve Copywriter ✍️</option>
+                <option value="Technisch Schrijver">Technisch Schrijver 🛠️</option>
+                <option value="Marketing Expert">Marketing Expert 📈</option>
+                <option value="Professor">Professor 🎓</option>
+                <option value="Klantenservice">Klantenservice 📞</option>
+                <option value="Motiverende Coach">Motiverende Coach 🏆</option>
             </select>
-            <label class="section-label">Temperatuur (Creativiteit)</label>
+            
+            <label class="section-label">Creativiteit (Temperatuur)</label>
             <input type="range" id="temp" min="0" max="10" value="7">
         </div>
 
         <label class="section-label">API Sleutel</label>
-        <input type="password" id="apiKey" placeholder="Plak hier je Gemini sleutel...">
+        <input type="password" id="apiKey" placeholder="Plak Gemini sleutel...">
 
         <label class="section-label">Configuratie</label>
         <div class="grid">
@@ -200,14 +176,12 @@
                 <option value="Nederlands">Nederlands 🇳🇱</option>
                 <option value="Engels">Engels 🇬🇧</option>
                 <option value="Duits">Duits 🇩🇪</option>
-                <option value="Frans">Frans 🇫🇷</option>
             </select>
             <select id="tone">
-                <option value="normaal">Standaard Toon</option>
+                <option value="normaal">Standaard</option>
                 <option value="formeel">Formeel</option>
                 <option value="informeel">Informeel</option>
                 <option value="zakelijk">Zakelijk</option>
-                <option value="enthousiast">Enthousiast</option>
             </select>
         </div>
 
@@ -225,24 +199,14 @@
             <button class="btn-sub" onclick="runAI('rewrite')">Herschrijven 🔄</button>
         </div>
 
-        <div id="redZoneBar" class="red-zone-translator">
-            <select id="quickLang" style="margin-bottom:0; flex-grow: 1;">
-                <option value="Nederlands">Nederlands 🇳🇱</option>
-                <option value="Engels">Engels 🇬🇧</option>
-                <option value="Duits">Duits 🇩🇪</option>
-            </select>
-            <button class="btn-sub" style="margin-bottom:0; background:var(--accent); border:none !important;" onclick="translateOutput()">VERTAAL</button>
-        </div>
-
         <div id="loader" class="loader"></div>
         <div id="response"></div>
     </div>
 </div>
 
 <script>
-    // AUTO-LOAD KEY
-    window.onload = function() {
-        const savedKey = localStorage.getItem('gemini_api_key');
+    window.onload = () => {
+        const savedKey = localStorage.getItem('v17_dual_key');
         if (savedKey) document.getElementById('apiKey').value = savedKey;
     };
 
@@ -254,38 +218,31 @@
     async function runAI(mode) {
         const key = document.getElementById('apiKey').value.trim();
         const text = document.getElementById('userInput').value;
-        const resBox = document.getElementById('response');
-        const loader = document.getElementById('loader');
-        const redZone = document.getElementById('redZoneBar');
-        
-        // Expert values
+        const model = document.getElementById('modelSelect').value;
         const persona = document.getElementById('persona').value;
-        const temp = document.getElementById('temp').value / 10;
         const tone = document.getElementById('tone').value;
         const lang = document.getElementById('langTo').value;
+        const temperature = document.getElementById('temp').value / 10;
+        
+        const resBox = document.getElementById('response');
+        const loader = document.getElementById('loader');
 
-        if (!key || !text) { alert("Vul a.u.b. de API sleutel en tekst in!"); return; }
-        localStorage.setItem('gemini_api_key', key);
+        if (!key || !text) { alert("Sleutel en tekst zijn verplicht!"); return; }
+        localStorage.setItem('v17_dual_key', key);
 
         resBox.style.display = 'none';
-        redZone.style.display = 'none';
         loader.style.display = 'block';
 
-        // Uitgebreide Prompt Engineering voor de V17
-        let systemPrompt = `${persona} Hanteer een ${tone} toon. `;
-        if (mode === 'spellcheck') systemPrompt += "Corrigeer alleen de spelling in de tekst. ";
-        if (mode === 'grammar') systemPrompt += "Verbeter de grammatica en zinsbouw. ";
-        if (mode === 'summarize') systemPrompt += "Geef een bondige samenvatting. ";
-        if (mode === 'rewrite') systemPrompt += "Herschrijf de tekst op een creatieve manier. ";
-        if (lang !== 'none') systemPrompt += `Beantwoord in het ${lang}. `;
-
+        let instruction = `Persona: ${persona}. Toon: ${tone}. Taak: ${mode}. `;
+        if (lang !== 'none') instruction += `Antwoord in het ${lang}. `;
+        
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    contents: [{ parts: [{ text: systemPrompt + "\n\nTekst om te verwerken: " + text }] }],
-                    generationConfig: { temperature: temp }
+                    contents: [{ parts: [{ text: instruction + "\n\nInhoud: " + text }] }],
+                    generationConfig: { temperature: temperature }
                 })
             });
             const data = await response.json();
@@ -293,9 +250,8 @@
             if (data.candidates && data.candidates[0].content.parts[0].text) {
                 resBox.innerText = data.candidates[0].content.parts[0].text;
                 resBox.style.display = 'block';
-                redZone.style.display = 'flex';
             } else {
-                resBox.innerText = "Error: Controleer of je API-sleutel correct is en of je een internetverbinding hebt.";
+                resBox.innerText = "Error: Model weigert of sleutel onjuist.";
                 resBox.style.display = 'block';
             }
         } catch (e) { 
@@ -303,28 +259,6 @@
             resBox.innerText = "Systeemfout: " + e.message;
             resBox.style.display = 'block';
         }
-    }
-
-    async function translateOutput() {
-        const key = document.getElementById('apiKey').value.trim();
-        const currentText = document.getElementById('response').innerText;
-        const targetLang = document.getElementById('quickLang').value;
-        const resBox = document.getElementById('response');
-        const loader = document.getElementById('loader');
-
-        if (!currentText) return;
-        loader.style.display = 'block';
-
-        try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: "Vertaal deze tekst exact naar " + targetLang + ": " + currentText }] }] })
-            });
-            const data = await response.json();
-            loader.style.display = 'none';
-            if (data.candidates) resBox.innerText = data.candidates[0].content.parts[0].text;
-        } catch (e) { loader.style.display = 'none'; }
     }
 </script>
 </body>
